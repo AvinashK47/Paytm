@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const ConnectDB = async () => {
-    await mongoose.connect('mongodb+srv://Avinash:Anshu%408385$@paytm-db.lgikzrx.mongodb.net/');
+    await mongoose.connect('mongourl');
     console.log("Connected to MongoDB!!");
 }
 
