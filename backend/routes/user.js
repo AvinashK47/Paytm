@@ -42,9 +42,15 @@ router.post('/signup', async (req,res)=>{
 
     const userId = User._id;
 
+
+    await Account.create({
+        userId,
+        balance : 1 + Math.random()*10000
+    })
+
     const token = jwt.sign( { userId } , JWT_SECRET , { expiresIn:'1h' } )
 
-    res.status(200).json({
+    return res.status(200).json({
         message : "User created Successfully",
         token : token
     })
@@ -115,6 +121,31 @@ router.put('/update', authMiddleware , async (req,res,next)=>{
         message : "Updated Successfully"
     })
 
-})
+});
 
-module.exports = router;    
+router.get('/bulk',authMiddleware,async(req,res,next)=>{
+    const filter = req.query.filter || "" ;
+    User.find({
+        $or : [{
+            firstname : {
+                "$regex" : filter
+            }
+        },{
+            lastname : {
+                "$regex" : filter 
+            }
+        }]
+    })
+
+    res.json({
+        user : users.map(user=>({
+            username : user.username,
+            firstname : user.firstname,
+            lastname : user.lastname,
+            _id : user._id
+        }))
+    })
+});
+
+
+module.exports = router

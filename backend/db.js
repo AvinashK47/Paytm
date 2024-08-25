@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 
+const MONGO_URL = require('./config')
+
 const ConnectDB = async () => {
-    await mongoose.connect('mongodb://localhost:27017/?directConnection=true');
+    await mongoose.connect(MONGO_URL);
     console.log("Connected to MongoDB!!");
 }
 
@@ -28,8 +30,22 @@ var UserSchema = new mongoose.Schema({
     } ,
 } , {timestamps : true} );
 
+const AccountSchema = new mongoose.Schema({
+    userId : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "User",
+        required : true
+    },
+    balance : {
+        type : Number,
+        required : true
+    }
+}) 
+
+const Account = mongoose.model('Account' , AccountSchema)
 const User = mongoose.model('Users' , UserSchema);
 
 module.exports = {
-    User
+    User,
+    Account
 }
