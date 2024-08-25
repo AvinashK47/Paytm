@@ -11,13 +11,10 @@ const SignupSchema = zod.object({
     username : zod.string(),
     firstname : zod.string(),
     lastname : zod.string(),
-    phno : zod.number(),
     password : zod.string()
 });
 
 router.post('/signup', async (req,res)=>{
-
-    res.send("signup page")
 
     const result = SignupSchema.safeParse(req.body);
     if(!result.success){
@@ -62,7 +59,6 @@ const SignInSchema = zod.object({
 
 router.get('/signin', async(req,res)=>{
 
-    res.send("signin page")
     const result = SignInSchema.safeParse(req.body);
     
     if(result != {success}){
@@ -103,8 +99,22 @@ const UpdateBody = zod.object({
     lastname : zod.string().optional()
 })
 
-router.put('/update',authMiddleware,(req,res,next)=>{
-    res.send("updation page");
+router.put('/update', authMiddleware , async (req,res,next)=>{
+
+    const{success} = UpdateBody.safeParse(req.body)
+
+    if(!success){
+        res.status(411).json({
+            message : "Error while updating Information"
+        })
+    }
+
+    await User.updateOne( { _id : req.userId } , req.body );
+
+    res.json({
+        message : "Updated Successfully"
+    })
+
 })
 
-module.exports = router;
+module.exports = router;    
