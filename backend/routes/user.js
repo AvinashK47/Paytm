@@ -3,7 +3,7 @@ const {User , Account }= require('../db')
 const express = require('express');
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
-const authMiddleware = require('../middlewares/middleware');
+const { authMiddleware } = require('../middlewares/middleware');
 const router = express.Router();
 
 const SignupSchema = zod.object({

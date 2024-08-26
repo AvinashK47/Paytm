@@ -1,6 +1,6 @@
 const express = require('express')
-const authMiddleware = require('../middlewares/middleware');
-const Account = require('../db');
+const { authMiddleware } = require('../middlewares/middleware');
+const { Account } = require('../db');
 
 const router = express.Router();
 
@@ -9,17 +9,14 @@ router.get('/balance',authMiddleware,async(req,res,next)=>{
     const account = await Account.findOne({
         userId : req.userId
     });
+    console.log(account)
 
     res.json({
-        balance : account.balance
+        "balance" : account.balance
     })
 })
 
-
-//   OPTIMIZATION Through MongoDB Transactions LEFT , SOON ... 
-
-
-router.post('/transfer',async(req,res,next)=>{
+router.post('/transfer' , authMiddleware , async(req,res,next)=>{
     const { to , amount } = req.body;
 
     const account = await Account.findOne({
@@ -38,7 +35,7 @@ router.post('/transfer',async(req,res,next)=>{
 
     if (!toAccount){
         return res.status(400).json({
-            message : "Account not found"
+            message : "Accountount not found"
         })
     }
 
@@ -59,4 +56,4 @@ router.post('/transfer',async(req,res,next)=>{
     })
 })
 
-module.exports = router ; 
+module.exports = router 

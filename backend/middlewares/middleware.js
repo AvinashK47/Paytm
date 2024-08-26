@@ -6,7 +6,7 @@ const jwtSecret = process.env.JWT_SECRET
 const authMiddleware = (req,res,next)=>{
     const authHeader = req.headers.authorization;
 
-    if(!authHeader || !authHeader.startswith("Bearer ") ){
+    if(!authHeader || !authHeader.startsWith("Bearer ") ){
         return res.status(403).json({})
     }
 
@@ -25,4 +25,4 @@ const authMiddleware = (req,res,next)=>{
     };
 };
 
-module.exports = authMiddleware ;
+module.exports = { authMiddleware } ;

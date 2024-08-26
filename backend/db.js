@@ -48,7 +48,4 @@ const AccountSchema = new mongoose.Schema({
 const Account = mongoose.model('Account' , AccountSchema)
 const User = mongoose.model('Users' , UserSchema);
 
-module.exports = {
-    User,
-    Account
-}
+module.exports = { User , Account }
