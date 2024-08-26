@@ -1,25 +1,28 @@
+require('dotenv').config()
+
+const mongouri = process.env.MONGO_URI
+
 const mongoose = require("mongoose");
 
-const MONGO_URL = require('./config')
-
-const ConnectDB = async () => {
-    await mongoose.connect(MONGO_URL);
-    console.log("Connected to MongoDB!!");
+if (mongoose.connect(mongouri)){
+    console.log("Connected to MongoDB Successfully")
 }
 
 var UserSchema = new mongoose.Schema({
     username : { 
-        type : String , 
+        type : String ,
+        unique : true,
+        trim : true,
+        lowercase : true,
+        minLength : 3,
+        maxLength : 30, 
         required : true
     } ,
     password : {
         type : String,
-        required : true 
+        required : true,
+        minLength : 6 
     } ,
-    email : { 
-        type : String , 
-        required : true 
-    },
     firstname : { 
         type : String , 
         required : true 
@@ -33,7 +36,7 @@ var UserSchema = new mongoose.Schema({
 const AccountSchema = new mongoose.Schema({
     userId : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "User",
+        ref : 'User'         ,
         required : true
     },
     balance : {

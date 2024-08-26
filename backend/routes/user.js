@@ -1,9 +1,8 @@
 const zod = require('zod');
-const {User}= require('../db')
+const {User , Account }= require('../db')
 const express = require('express');
-const mongoose = require('mongoose');
+require('dotenv').config()
 const jwt = require('jsonwebtoken')
-const JWT_SECRET = require('../config.js') ;
 const authMiddleware = require('../middlewares/middleware');
 const router = express.Router();
 
@@ -40,7 +39,7 @@ router.post('/signup', async (req,res)=>{
         password:req.body.password
     })
 
-    const userId = User._id;
+    const userId = user._id;
 
 
     await Account.create({
@@ -48,7 +47,7 @@ router.post('/signup', async (req,res)=>{
         balance : 1 + Math.random()*10000
     })
 
-    const token = jwt.sign( { userId } , JWT_SECRET , { expiresIn:'1h' } )
+    const token = jwt.sign( { userId } , process.env.JWT_SECRET , { expiresIn:'1h' } )
 
     return res.status(200).json({
         message : "User created Successfully",
@@ -105,9 +104,9 @@ const UpdateBody = zod.object({
     lastname : zod.string().optional()
 })
 
-router.put('/update', authMiddleware , async (req,res,next)=>{
+router.put('/', authMiddleware , async (req,res,next)=>{
 
-    const{success} = UpdateBody.safeParse(req.body)
+    const { success } = UpdateBody.safeParse(req.body)
 
     if(!success){
         res.status(411).json({
@@ -148,4 +147,4 @@ router.get('/bulk',authMiddleware,async(req,res,next)=>{
 });
 
 
-module.exports = router
+module.exports = router;
