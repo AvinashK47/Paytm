@@ -1,5 +1,5 @@
 import {Link} from "react-router-dom"
-export function BottomWarning(label, buttonText , to ){
+export function BottomWarning({label, buttonText , to }){
     return <div>
         <div className=" py-2 text-small flex justify-center " >
             {label}
